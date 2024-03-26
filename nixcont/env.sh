@@ -4,9 +4,7 @@ OPERATION="$1"
 CONTAINER_NAME="nixcont"
 CONTAINER_ARCH="arm64"
 
-set -x
-set -e
-set -u
+set -xeu
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -18,7 +16,7 @@ if [[ "$OPERATION" == "setup" ]]; then
             -v ${PWD}/conf:/etc/nix \
             -v ${PWD}/data/nix:/nix \
             -v ${PWD}/data/root:/root \
-            --arch "$CONTAINER_ARCH" ubuntu:mantic \
+            --arch "$CONTAINER_ARCH" ubuntu:bionic \
             /etc/nix/entry.sh
     fi
 elif [[ "$OPERATION" == "clean" ]]; then
@@ -33,7 +31,7 @@ elif [[ "$OPERATION" == "build" ]]; then
 
     # build
     echo "build-$2.sh" > data/root/.job
-    # podman start -a "$CONTAINER_NAME"
+    podman start -a "$CONTAINER_NAME"
 
     # pack, todo: not only appimage
     result="$(realpath "$(fd -t x -e AppImage $2 data/nix)")"

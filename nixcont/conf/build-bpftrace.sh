@@ -1,16 +1,15 @@
 #!/bin/bash
 
-set -x
-set -e
-set -u
-
-# proxy, if needed
-export HTTPS_PROXY=http://192.168.31.3:7890
+set -xeu
 
 # we're in /root
-apt install git
-git clone https://github.com/iovisor/bpftrace
-cd bpftrace
+if [[ ! -d bpftrace ]]; then
+    git clone https://github.com/iovisor/bpftrace
+    cd bpftrace
+else
+    cd bpftrace
+    git pull --rebase
+fi
 
 # nix to build
 time nix build .#appimage

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
+export TZ=Asia/Shanghai
+export USER=root
+
 if [[ ! -f /.setup ]]; then
     # install deps
     sed -i 's@//.*ports.ubuntu.com@//mirrors.tuna.tsinghua.edu.cn@g' /etc/apt/sources.list
     apt update
     apt upgrade -y
-    apt install -y build-essential sudo curl
-
-    # proxy, if needed
-    export HTTPS_PROXY=http://192.168.31.3:7890
+    apt install -y build-essential sudo curl git python3
 
     # workaround, https://github.com/NixOS/nix/issues/1559
     groupadd -r -g 30000 nixbld
@@ -26,7 +26,9 @@ if [[ ! -f /.setup ]]; then
     touch /.setup
 fi
 
-export USER=root
+# proxy, if needed
+# export HTTPS_PROXY=http://192.168.31.3:7890
+
 source /root/.nix-profile/etc/profile.d/nix.sh
 cd /root
 
