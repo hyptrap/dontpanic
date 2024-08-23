@@ -19,6 +19,14 @@ set -x
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+strip="aarch64-linux-gnu-strip"
+if [[ ! -x "$strip" ]]; then
+    strip="aarch64-suse-linux-strip"
+else
+    echo "missing aarch64 strip?"
+    exit 1
+fi
+
 rm -rf squashfs-root
 qemu-aarch64 "$IMAGE" --appimage-extract &> /dev/null
 
@@ -39,7 +47,7 @@ rm -rf nix/store
 mv nix/sink nix/store
 
 # seems not much useful...
-(fd -e '.so' . nix/store/ | xargs realpath | sort | uniq | xargs aarch64-suse-linux-strip -s) || true
+(fd -e '.so' . nix/store/ | xargs realpath | sort | uniq | xargs $strip -s) || true
 
 # in alpine:
 #   ./autogen.sh

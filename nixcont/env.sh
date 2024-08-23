@@ -16,6 +16,7 @@ if [[ "$OPERATION" == "setup" ]]; then
             -v ${PWD}/conf:/etc/nix \
             -v ${PWD}/data/nix:/nix \
             -v ${PWD}/data/root:/root \
+            -v ${HOME}:${HOME} \
             --arch "$CONTAINER_ARCH" ubuntu:bionic \
             /etc/nix/entry.sh
     fi
